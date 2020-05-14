@@ -115,12 +115,69 @@ function studioHomePage() {
         registerButton.addEventListener("click", function () {
             header.innerHTML = "";
             page.innerHTML = "";
-            page.insertAdjacentHTML("afterbegin", "<form class='box'><h1>Login</h1><input type='text' value='Username' id='Username'><input type='password' value='Password' id='Password'><input type='submit' value='Register' id='Login''></form>")
+            page.insertAdjacentHTML("afterbegin", "<form class='box'><h1>Login</h1><input type='text' value='Username' id='Username'><input type='password' value='Password' id='Password'><input type='submit' value='Register' id='saveButton''></form>")
 
+            var saveButton = document.getElementById("saveButton");
+
+            saveButton.addEventListener("click", function()
+            {
+                var studioname = document.getElementById("Username").value;
+                var password = document.getElementById("Password").value;
+
+                moviePage.innerHTML = "";
+                page.innerHTML = "";
+
+                console.log(studioname, password);
+                addStudio(studioname, password);
+            })
         })
 
     }
 
+}
+
+function addStudio(username, password)
+{
+    var data = { name: username, password: password }
+
+    fetch('https://localhost:5001/api/filmstudio', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+
+        printStudioList();
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    })
+}
+
+var studioList = document.getElementById("studioList");
+
+function printStudioList()
+{
+    fetch('https://localhost:5001/api/filmstudio')
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(json) {
+        studioList.innerHTML = "";
+        moviePage.innerHTML = "";
+        header.innerHTML = "";
+
+        for (i = 0; i < json.length; i++)
+        {
+            console.log(json[i].name)
+
+            studioList.insertAdjacentHTML("beforeend", "<div> <li> " + json[i].name + "</li></div>")
+        }
+    })
 }
 
 adminPage.addEventListener("click", function () {

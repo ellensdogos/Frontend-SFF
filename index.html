@@ -5,14 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SFF Filmstudio</title>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
+    <div class="navbar">
+        <a id="movies" href="index.html" class="fa fa-movie">Movies</a>
+        <a id="triviaPage" class="fa fa-movie">Trivias</a>
+        <a id="studioPage" class="fa fa-movie">Studios</a>
+        <a id="adminPage" class="fa fa-movie" style="float:right">Administrator</a>
+      </div>
 
-    <div>
-        Welcome to SFF Filmstudio!
+    <div class="header" id="header">
+        <h1>Welcome to SFF</h1>
+    </div>
+    
+    <div class="container" id="container">
+        <div class="column" id="movie1">
+            <img src="https://m.media-amazon.com/images/M/MV5BMjM2MDgxMDg0Nl5BMl5BanBnXkFtZTgwNTM2OTM5NDE@._V1_.jpg" alt="Jurassic Park" style="width: 100%;">  
+        </div>
+        <div class="column" id="movie2">
+            <img src="https://m.media-amazon.com/images/M/MV5BNzQzMzJhZTEtOWM4NS00MTdhLTg0YjgtMjM4MDRkZjUwZDBlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SY1000_CR0,0,671,1000_AL_.jpg" alt="Jurassic Park" style="width: 100%;">        
+        </div>
+        <div class="column" id="movie3">
+            <img src="https://m.media-amazon.com/images/M/MV5BMTI5Mjg1MzM4NF5BMl5BanBnXkFtZTcwNTAyNzUzMw@@._V1_SY1000_CR0,0,674,1000_AL_.jpg" style="width: 100%;">        
+        </div>
     </div>
 
+    <div id="page"> 
+
+        <div id="triviaList"></div>
+    
+        <div id="studio"></div>
+        <div id="studioList"></div>
+
+    </div>
 
     <script src="script.js"></script>
+    <script src="trivias.js"></script>
+    <script src="login.js"></script>
 </body>
 </html>

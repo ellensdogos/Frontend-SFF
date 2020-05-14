@@ -55,7 +55,7 @@ movieOneTrivias.addEventListener("click", function ()
 
         if (json.filmId != 1)
         {
-            console.log("Finns ej");
+            console.log("Finns ej någon trivia inlagd för filmen");
             triviaList.insertAdjacentHTML("beforeend", "<div> Finns ingen trivia för denna film </div>")
         }
         else
