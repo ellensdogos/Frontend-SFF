@@ -43,7 +43,7 @@ triviaPage.addEventListener("click", function () {
 
 movieOneTrivias.addEventListener("click", function () 
 {
-    triviaList.innerHTML = "";
+    triviaList.innerHTML = "Trivias: ";
 
     fetch('https://localhost:5001/api/filmTrivia')
     .then(function(response) {
@@ -56,13 +56,13 @@ movieOneTrivias.addEventListener("click", function ()
         if (json.filmId != 1)
         {
             console.log("Finns ej någon trivia inlagd för filmen");
-            triviaList.insertAdjacentHTML("beforeend", "<div> Finns ingen trivia för denna film </div>")
+            triviaList.insertAdjacentHTML("beforeend", "<div class='text-style'> Finns ingen trivia för denna film </div>")
         }
         else
         {
             for (i = 0; i < filterTrivia.length; i++)
             {
-                triviaList.insertAdjacentHTML("beforeend", "<div>" + filterTrivia[i].trivia + "</div>")
+                triviaList.insertAdjacentHTML("beforeend", "<div class='text-style'>" + filterTrivia[i].trivia + "</div>")
             }
         }
     })
@@ -70,7 +70,7 @@ movieOneTrivias.addEventListener("click", function ()
 
 movieTwoTrivias.addEventListener("click", function ()
 {
-    triviaList.innerHTML = "";
+    triviaList.innerHTML = "Trivias: ";
 
     fetch('https://localhost:5001/api/filmTrivia')
     .then(function(response) {
@@ -82,14 +82,14 @@ movieTwoTrivias.addEventListener("click", function ()
         
         for (i = 0; i < filterTrivia.length; i++)
         {
-            triviaList.insertAdjacentHTML("beforeend", "<div>" + filterTrivia[i].trivia + "</div>")
+            triviaList.insertAdjacentHTML("beforeend", "<div class='text-style'>" + filterTrivia[i].trivia + "</div>")
         }
     })
 })
 
 movieThreeTrivias.addEventListener("click", function () 
 {
-    triviaList.innerHTML = "";
+    triviaList.innerHTML = "Trivias: ";
 
     fetch('https://localhost:5001/api/filmTrivia')
     .then(function(response) {
@@ -101,7 +101,7 @@ movieThreeTrivias.addEventListener("click", function ()
         
         for (i = 0; i < filterTrivia.length; i++)
         {
-            triviaList.insertAdjacentHTML("beforeend", "<div>" + filterTrivia[i].trivia + "</div>")
+            triviaList.insertAdjacentHTML("beforeend", "<div class='text-style'>" + filterTrivia[i].trivia + "</div>")
         }
     })
 })
