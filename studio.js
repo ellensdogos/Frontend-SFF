@@ -3,6 +3,8 @@ var adminPage = document.getElementById("adminPage");
 var studioPage = document.getElementById("studioPage");
 var page = document.getElementById("page");
 
+
+
 studioPage.addEventListener("click", function () {
     studioHomePage();
 })
@@ -72,6 +74,7 @@ function studioWelcomePage() {
     studioContent();
 }
 
+
 function studioContent() {
     page.insertAdjacentHTML("afterbegin", "<div class='flex-container'><button id='borrow' class='flex-item'>Borrow movie</button><button id='return' class='flex-item'>Return movie</button><button id='writeTrivia' class='flex-item'>Write trivia</button></div>")
 
@@ -80,37 +83,167 @@ function studioContent() {
     var triviaBtn = document.getElementById("writeTrivia");
 
     borrowBtn.addEventListener("click", function () {
+        page.innerHTML = "";
+        page.insertAdjacentHTML("beforeend", '<input type="text" id="movie" value="Enter filmId..."><button id="borrow">Borrow</button>')
 
+        var rentMovie = document.getElementById("borrow");
+
+        rentMovie.addEventListener("click", function () {
+
+            var movieId = parseInt(document.getElementById("movie").value);
+
+            console.log(movieId);
+
+            fetch('https://localhost:5001/api/film')
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (json) {
+
+                    var getMovieInfo = json.filter(a => a.id == movieId);
+
+                    for (i = 0; i < getMovieInfo.length; i++) {
+                        var stock = getMovieInfo[i].stock - 1;
+                        parseInt(stock);
+                        var title = getMovieInfo[i].name;
+                    }
+
+                    borrowMovie(movieId, stock, title);
+                })
+        })
     })
 
     returnBtn.addEventListener("click", function () {
+        page.innerHTML = "";
+        page.insertAdjacentHTML("beforeend", '<input type="text" id="movie" value="Enter filmId..."><button id="return">Return</button>')
 
+        var returnFilm = document.getElementById("return");
+
+        returnFilm.addEventListener("click", function () {
+
+            var movieId = parseInt(document.getElementById("movie").value);
+            var studio = parseInt(localStorage.getItem("userId"));
+
+            console.log(movieId);
+
+            fetch('https://localhost:5001/api/film')
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (json) {
+
+                    var getMovieInfo = json.filter(a => a.id == movieId);
+
+                    for (i = 0; i < getMovieInfo.length; i++) {
+                        var stock = getMovieInfo[i].stock + 1;
+                        parseInt(stock);
+                        var title = getMovieInfo[i].name;
+                    }
+
+                    fetch('https://localhost:5001/api/rentedFilm')
+                    .then(function (response) {
+                        return response.json();
+                    })
+                    .then(function (json) {
+            
+                        var rentedFilmInfo = json.filter(a => a.filmId == movieId && a.studioId == studio);
+            
+                        for (i = 0; i < rentedFilmInfo.length; i++) {
+                            var rentalId = rentedFilmInfo[i].id;
+                            parseInt(rentalId);
+                        }
+                        returnMovie(movieId, stock, title, rentalId)
+                    })
+                })
+
+        })
     })
 
     triviaBtn.addEventListener("click", function () {
-        page.insertAdjacentHTML("beforeend", '<input type="text" id="trivitext" value="Enter trivia..."><input type="text" id="movieId" value="Enter filmId..."><button id="saveTrivia">Save</button>')
+        page.innerHTML = "";
+        page.insertAdjacentHTML("beforeend", '<input type="text" id="triviatext" value="Enter trivia..."><input type="text" id="movieId" value="Enter filmId..."><button id="saveTrivia">Save</button>')
 
         var saveTrivia = document.getElementById("saveTrivia");
-        var triviaText = document.getElementById("triviatext");
-        var movieId = document.getElementById("movieId");
 
         saveTrivia.addEventListener("click", function () {
+
+            var triviaText = document.getElementById("triviatext").value;
+            var movieId = parseInt(document.getElementById("movieId").value);
             //fetch, if filmid finns så add, annars error
+            console.log(movieId, triviaText)
             addTrivia(movieId, triviaText);
         })
     })
 }
 
-function borrowMovie() {
+function borrowMovie(id, stock, name) {
 
+    var data = { id: id, stock: stock, name: name }
+    var studio = parseInt(localStorage.getItem("userId"));
+
+    fetch('https://localhost:5001/api/film/' + id, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+
+    fetch('https://localhost:5001/api/rentedFilm', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            filmId: id,
+            studioId: studio,
+            returned: false
+        }),
+    })
+        .then(response => response.json())
+        .then(json => {
+            page.insertAdjacentHTML("afterbegin", "<div><p> The movie was rented successfully!</p></div>");
+            goBackBtn();
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        })
 }
 
-function returnMovie() {
+function returnMovie(id, stock, name, rentalId) {
 
+    var data = { id: id, stock: stock, name: name }
+
+    fetch('https://localhost:5001/api/film/' + id, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+
+    fetch('https://localhost:5001/api/rentedFilm/' + rentalId, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+        .then(response => response.json());
 }
 
 function addTrivia(filmId, trivia) {
-
     var data = { filmId: filmId, trivia: trivia }
 
     fetch('https://localhost:5001/api/filmTrivia', {
@@ -130,6 +263,7 @@ function addTrivia(filmId, trivia) {
         .catch((error) => {
             console.error('Error:', error);
         })
+
 }
 
 function ErrorPage() {
