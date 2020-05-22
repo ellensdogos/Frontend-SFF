@@ -3,8 +3,6 @@ var adminPage = document.getElementById("adminPage");
 var studioPage = document.getElementById("studioPage");
 var page = document.getElementById("page");
 
-
-
 studioPage.addEventListener("click", function () {
     studioHomePage();
 })
