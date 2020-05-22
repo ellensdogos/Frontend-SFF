@@ -367,7 +367,7 @@ function addStudio(username, password) {
 
 var studioList = document.getElementById("studioList");
 
-function printStudioList() {
+/*function printStudioList() {
     fetch('https://localhost:5001/api/filmstudio')
         .then(function (response) {
             return response.json();
@@ -380,7 +380,7 @@ function printStudioList() {
                 studioList.insertAdjacentHTML("beforeend", "<div> <li> " + json[i].name + "</li></div>")
             }
         })
-}
+*/
 
 adminPage.addEventListener("click", function () {
     deletePageContent();
